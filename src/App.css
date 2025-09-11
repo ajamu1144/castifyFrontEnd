@@ -1,0 +1,26 @@
+*{
+  box-sizing: border-box;
+}
+
+body{
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.castsContainer{
+  display: grid;
+  padding: 30px;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #ffffff;
+  }
+}
