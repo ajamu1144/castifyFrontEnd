@@ -2,7 +2,7 @@ import React from 'react'
 import signUpImg from '../../public/signUpImg.jpg'
 import Form from "./Form.jsx";
 import Alert from "./Alert.jsx";
-import axios from "axios";
+import axios from "../../Config/axios.config.js";
 import Loader from "./Loader.jsx";
 
 const SignUp = () => {
@@ -13,7 +13,6 @@ const SignUp = () => {
                 Start Posting Casts, Stickers and Gists Anonymously
             </h1>
             <Form/>  <br/>
-            <Loader/>
             <p className='text-center opacity-35'>Note: When you revisit this page, your information will be gone. Therefore making you anonymous</p>
         </div>
     )

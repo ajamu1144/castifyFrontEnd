@@ -19,7 +19,7 @@ const Loader = () => {
                 />
             </svg>
             <span className="sr-only">Loading...</span> <br/>
-            <p>Signing you Up ...</p>
+            <p>Casting ...</p>
         </div>
     );
 };

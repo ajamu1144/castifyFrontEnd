@@ -2,7 +2,7 @@ import React from 'react';
 
 const Modal = ({ onClose, comments }) => {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/10">
             <div className="relative w-full max-w-2xl p-6 bg-gray-800 rounded-lg shadow-xl">
                 <div className="flex items-start justify-between pb-3 border-b border-gray-700">
                     <h3 className="text-xl font-semibold text-white">

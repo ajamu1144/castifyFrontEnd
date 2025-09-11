@@ -10,6 +10,7 @@ const Form = () => {
     const [nickname, setNickname] = useState("");
     const [previewUrl, setPreviewUrl] = useState(null);
     const [anonymous, setAnonymous] = useState(true);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleFileChange = (e) => {
@@ -50,16 +51,23 @@ const Form = () => {
     // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const res = await axios.post(" http://localhost:27601/user/", { first_name, last_name, nickname });
             console.log("Saved user:", res.data);
+            navigate('/castsPage')
+            // setLoading(true);
         } catch (err) {
             console.error("Error:", err);
+        }
+        finally {
+            // setLoading(false);
         }
     };
     return (
         <div className=''>
+            { loading &&
+                <Loader/>
+            }
             <form className="flex flex-col max-w-md mx-auto " onSubmit={handleSubmit}>
                 {/* Radio buttons */}
                 <div className='flex flex-col justify-center items-center self-center'>
