@@ -2,25 +2,18 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Alert from "./Alert.jsx";
+import Loader from "./Loader.jsx";
 
 const Form = () => {
+    const [first_name, setFirstName] = useState("");
+    const [last_name, setLastName] = useState("");
+    const [nickname, setNickname] = useState("");
     const [previewUrl, setPreviewUrl] = useState(null);
-    const [formData, setFormData] = useState({
-        first_name: "",
-        last_name: "",
-        nickname: "",
-        profilePicture: "",
-    });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,          // keep other fields unchanged
-            [name]: value,    // update the field that changed
-        }));
-    };
+    const [anonymous, setAnonymous] = useState(true);
+    const navigate = useNavigate();
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -30,25 +23,41 @@ const Form = () => {
         }
     };
 
-    const [anonymous, setAnonymous] = useState(true);
-    const navigate = useNavigate();
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     // navigate('/castsPage')
+    //     const formData = {username: first_name};
+    //     const username = first_name;
+    //     try {
+    //         await axios.post('http://localhost:27601/user/', username)
+    //     }
+    //     catch (error) {
+    //         console.error('Error posting data:', error);
+    //     }
+    //     // const formData = {
+    //     //     username: anonymous ? e.target.nickname.value : e.target.first_name.value + " " + e.target.last_name.value,
+    //     //     // username: e.target.nickname.value ? e.target.nickname.value : e.target.first_name.value + " " + e.target.last_name.value,
+    //     //     profilePicture: e.target.profilePicture.value
+    //     // }
+    //     // try {
+    //     //     const response = await axios.post(' http://localhost:27601/user/', formData, {
+    //     //         headers: {"Content-Type": "application/json"}
+    //     //     });
+    //     //     console.log(response.data);
+    //     // } catch (error) {
+    //     //     console.error('Error posting data:', error);
+    //     // }
+    // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/castsPage')
-        const formData = {
-            username: anonymous ? e.target.nickname.value : e.target.first_name.value + " " + e.target.last_name.value,
-            // username: e.target.nickname.value ? e.target.nickname.value : e.target.first_name.value + " " + e.target.last_name.value,
-            profilePicture: e.target.profilePicture.value
-        }
+
         try {
-            const response = await axios.post(' http://localhost:27601/user/', formData, {
-                headers: {"Content-Type": "application/json"}
-            });
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error posting data:', error);
+            const res = await axios.post(" http://localhost:27601/user/", { first_name, last_name, nickname });
+            console.log("Saved user:", res.data);
+        } catch (err) {
+            console.error("Error:", err);
         }
-    }
+    };
     return (
         <div className=''>
             <form className="flex flex-col max-w-md mx-auto " onSubmit={handleSubmit}>
@@ -63,7 +72,7 @@ const Form = () => {
                             name='profilePicture'
                             id="profile_input_preview"
                             className="hidden"
-                            value={formData.profilePicture}
+                            // value={formData.profilePicture}
                             accept="image/*"
                             onChange={handleFileChange}
                         />
@@ -92,10 +101,14 @@ const Form = () => {
                     <input
                         id="default-radio-1"
                         type="radio"
-                        value="anonymous"
+                        // value="anonymous"
                         name="default-radio"
                         checked={anonymous}
-                        onChange={() => setAnonymous(true)}
+                        onChange={() => {
+                            setAnonymous(true)
+                            setFirstName("")
+                            setLastName("")
+                        }}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <label
@@ -110,10 +123,13 @@ const Form = () => {
                     <input
                         id="default-radio-2"
                         type="radio"
-                        value="public"
+                        // value="public"
                         name="default-radio"
                         checked={!anonymous}
-                        onChange={() => setAnonymous(false)}
+                        onChange={() => {
+                            setAnonymous(false)
+                            setNickname("")
+                        }}
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     />
                     <label
@@ -132,10 +148,12 @@ const Form = () => {
                             type="text"
                             name="nickname"
                             id="nickname"
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                             placeholder=" "
-                            value={formData.nickname}
-                            onChange={handleChange}
+                            // value={formData.nickname}
+                            // onChange={handleChange}
                             required
                         />
                         <label
@@ -153,10 +171,12 @@ const Form = () => {
                                 type="text"
                                 name="first_name"
                                 id="first_name"
+                                value={first_name}
+                                onChange={(e) => setFirstName(e.target.value)}
                                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
-                                value={formData.first_name}
-                                onChange={handleChange}
+                                // value={formData.first_name}
+                                // onChange={handleChange}
                                 required
                             />
                             <label
@@ -172,8 +192,10 @@ const Form = () => {
                                 type="text"
                                 name="last_name"
                                 id="last_name"
-                                value={formData.last_name}
-                                onChange={handleChange}
+                                value={last_name}
+                                onChange={(e) => setLastName(e.target.value)}
+                                // value={formData.last_name}
+                                // onChange={handleChange}
                                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                 placeholder=" "
                                 required
