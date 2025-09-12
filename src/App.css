@@ -21,6 +21,10 @@ body{
   grid-template-columns: repeat(2, 5fr);
 }
 
+.castsContainer div{
+
+}
+
 @media (max-width: 768px) {
   .castsContainer{
     grid-template-columns: repeat(1, 1fr);

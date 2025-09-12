@@ -50,17 +50,19 @@ const Form = () => {
     //     // }
     // }
     const handleSubmit = async (e) => {
+        setLoading(true);
         e.preventDefault();
         try {
             const res = await axios.post("/user", { first_name, last_name, nickname });
             console.log("Saved user:", res.data);
             navigate('/castsPage')
+            setLoading(false)
             // setLoading(true);
         } catch (err) {
             console.error("Error:", err);
         }
         finally {
-            // setLoading(false);
+            setLoading(false);
         }
     };
     return (
