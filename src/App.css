@@ -9,7 +9,7 @@ body{
   flex-direction: column;
   justify-content: center;
   margin-bottom: 50px;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
 }
 
 .castsContainer{

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../Config/axios.config.js";
 import Alert from "./Alert.jsx";
 import Loader from "./Loader.jsx";
 
@@ -52,7 +52,7 @@ const Form = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(" http://localhost:27601/user/", { first_name, last_name, nickname });
+            const res = await axios.post("/user", { first_name, last_name, nickname });
             console.log("Saved user:", res.data);
             navigate('/castsPage')
             // setLoading(true);
