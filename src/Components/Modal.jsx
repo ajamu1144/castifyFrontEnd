@@ -16,6 +16,8 @@ const Modal = ({ onClose, castId }) => {
             setLoading(false);
         } catch (error) {
             console.error('Error fetching comments:', error);
+        }
+        finally {
             setLoading(false);
         }
     };
@@ -29,13 +31,17 @@ const Modal = ({ onClose, castId }) => {
     const handleCommentsubmit = async (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
-
+        setLoading(true);
         try {
             await axios.post(`/comment/${castId}`, { text: newComment });
             setNewComment("");
             fetchComments(); // Refresh comments after posting
+            setLoading(false);
         } catch (error) {
             console.error('Error posting comment:', error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
