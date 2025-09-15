@@ -70,7 +70,7 @@ const Modal = ({ onClose, castId }) => {
                     <CommentForm newComment={newComment} func={handleCommentsubmit} setNewComment={setNewComment} />
                     {allComments && allComments.length > 0 ? (
                         allComments.map((comment, index) => (
-                            <div key={index} className="mb-2" >
+                            <div key={index} className="mb-2 overflow-y-scroll" style={{maxHeight: '200px', overflowY: 'scroll' , overflowX: 'hidden'}}>
                                 <p > {comment.text}</p>
                                 <hr/>
                             </div>
