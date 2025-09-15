@@ -46,7 +46,7 @@ const Modal = ({ onClose, castId }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/10 self-center" style={{maxWidth: '100vw', maxHeight: '70vh'}}>
             {
                 loading &&
                 <Loader/>
@@ -66,18 +66,21 @@ const Modal = ({ onClose, castId }) => {
                         </svg>
                     </button>
                 </div>
-                <div className="py-4 text-gray-400">
+                <div className="py-4 text-gray-400 ">
                     <CommentForm newComment={newComment} func={handleCommentsubmit} setNewComment={setNewComment} />
-                    {allComments && allComments.length > 0 ? (
-                        allComments.map((comment, index) => (
-                            <div key={index} className="mb-2 overflow-y-scroll" style={{maxHeight: '200px', overflowY: 'scroll' , overflowX: 'hidden'}}>
-                                <p > {comment.text}</p>
-                                <hr/>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No comments available.</p>
-                    )}
+                    <div className='overflow-y-scroll' style={{maxHeight: '200px', overflowY: 'auto' , overflowX: 'hidden'}}>
+
+                        {allComments && allComments.length > 0 ? (
+                            allComments.map((comment, index) => (
+                                <div key={index} className="mb-2 ">
+                                    <p > {comment.text}</p>
+                                    <hr/>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments available.</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
