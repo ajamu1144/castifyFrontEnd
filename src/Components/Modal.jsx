@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../../Config/axios.config.js';
+import CommentForm from "./CommentForm.jsx";
 
-const Modal = ({ onClose, comments }) => {
+const Modal = ({ onClose, castId }) => {
+    const [allComments, setAllComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`/comment/${castId}`);
+            setAllComments(response.data);
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (castId) {
+            fetchComments();
+        }
+    }, [castId]);
+
+    const handleCommentsubmit = async (e) => {
+        e.preventDefault();
+        if (!newComment.trim()) return;
+
+        try {
+            await axios.post(`/comment/${castId}`, { text: newComment });
+            setNewComment("");
+            fetchComments(); // Refresh comments after posting
+        } catch (error) {
+            console.error('Error posting comment:', error);
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/10">
             <div className="relative w-full max-w-2xl p-6 bg-gray-800 rounded-lg shadow-xl">
-                <div className="flex items-start justify-between pb-3 border-b border-gray-700">
+                <div className="flex items-start justify-between">
                     <h3 className="text-xl font-semibold text-white">
                         Comments
                     </h3>
@@ -19,9 +52,13 @@ const Modal = ({ onClose, comments }) => {
                     </button>
                 </div>
                 <div className="py-4 text-gray-400">
-                    {comments && comments.length > 0 ? (
-                        comments.map((comment, index) => (
-                            <p key={index} className="mb-2">{comment.comment}</p>
+                    <CommentForm newComment={newComment} func={handleCommentsubmit} setNewComment={setNewComment} />
+                    {allComments && allComments.length > 0 ? (
+                        allComments.map((comment, index) => (
+                            <div key={index} className="mb-2" >
+                                <p > {comment.text}</p>
+                                <hr/>
+                            </div>
                         ))
                     ) : (
                         <p>No comments available.</p>

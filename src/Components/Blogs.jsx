@@ -4,22 +4,24 @@ import Modal from './Modal.jsx'
 import { FaRegComment } from "react-icons/fa";
 import NoCastsFound from "./NoCasts.jsx";
 import {Link} from "react-router-dom";
+import CastCard from "./CastCard.jsx";
 
 const Blogs = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [allBlogs, setAllBlogs] = useState([]);
-    const [selectedComments, setSelectedComments] = useState([]);
+    const [allCasts, setAllCasts] = useState([]);
+    const [selectedCastId, setSelectedCastId] = useState(null); // Changed to store castId
 
     const fetchData = async () => {
         try {
             const response = await axios.get('/casts');
-            setAllBlogs(response.data);
+            setAllCasts(response.data);
         } catch (err) {
             console.error(`An Error Occurred: ${err}`);
         }
     };
+
     useEffect(() => {
-            fetchData();
+        fetchData();
         const interval = setInterval(() => {
             fetchData();
         }, 5000);
@@ -28,16 +30,15 @@ const Blogs = () => {
         };
     }, []);
 
-    const openModalWithComments = (comments) => {
-        setSelectedComments(comments);
+    const openModalWithComments = (castId) => {
+        setSelectedCastId(castId); // Store castId instead of comments
         setIsModalOpen(true);
     };
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
-        // Clear comments when closing the modal
         if (isModalOpen) {
-            setSelectedComments([]);
+            setSelectedCastId(null); // Clear castId when closing
         }
     };
 
@@ -50,26 +51,23 @@ const Blogs = () => {
             </button>
             <div className='castsContainer'>
                 {
-                    allBlogs.length !== 0 ?
-                        allBlogs.map(cast => {
+                    allCasts.length !== 0 ?
+                        allCasts.map(cast => {
                             return (
-                                <div
-                                    key={cast._id}
-                                    className="flex relative flex-col p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{cast.title}</h5>
-                                    <p className="font-normal text-gray-700 dark:text-gray-200">{cast.cast}</p>
-                                    <p className='text-gray-700 dark:text-gray-400'>By: {cast.author}</p>
-                                    <FaRegComment
-                                        onClick={() => openModalWithComments(cast.comments)}
-                                        className='absolute bottom-4 right-4 rounded-full text-white cursor-pointer scale-125'
-                                    />
-                                </div>
+                                <CastCard
+                                    commentCount={cast.comments}
+                                    key={cast._id} // Added key for React list rendering
+                                    castAuthor={cast.author}
+                                    castTitle={cast.title}
+                                    castContent={cast.cast}
+                                    func={() => openModalWithComments(cast._id)} // Pass castId
+                                />
                             );
                         })
                         :
                         <NoCastsFound/>
                 }
-                {isModalOpen && <Modal onClose={toggleModal} comments={selectedComments} />}
+                {isModalOpen && <Modal onClose={toggleModal} castId={selectedCastId} />}
             </div>
         </div>
     );
