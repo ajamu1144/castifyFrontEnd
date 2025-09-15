@@ -11,7 +11,7 @@ const CastCard = ({castTitle, castContent, castAuthor, func, commentCount}) => {
             <div className='flex '>
                 <FaRegComment
                     onClick={func}
-                    className='absolute bottom-4 right-4 rounded-full text-white cursor-pointer scale-125'
+                    className='absolute bottom-4 right-4 rounded-full text-gray-900 cursor-pointer scale-125 dark:text-white'
                 /><p className='absolute bottom-4 right-10 rounded-full text-white cursor-pointer scale-125'>{commentCount}</p>
             </div>
         </div>
