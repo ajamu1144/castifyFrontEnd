@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../Config/axios.config.js';
 import CommentForm from "./CommentForm.jsx";
+import Loader from "./Loader.jsx";
 
 const Modal = ({ onClose, castId }) => {
     const [allComments, setAllComments] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [newComment, setNewComment] = useState("");
 
     const fetchComments = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(`/comment/${castId}`);
             setAllComments(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching comments:', error);
+            setLoading(false);
         }
     };
 
@@ -36,6 +41,10 @@ const Modal = ({ onClose, castId }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/10">
+            {
+                loading &&
+                <Loader/>
+            }
             <div className="relative w-full max-w-2xl p-6 bg-gray-800 rounded-lg shadow-xl">
                 <div className="flex items-start justify-between">
                     <h3 className="text-xl font-semibold text-white">
